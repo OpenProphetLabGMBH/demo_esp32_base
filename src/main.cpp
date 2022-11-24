@@ -8,13 +8,20 @@
  */
 
 #include <Arduino.h>
-#include "debug.h"
+#include "config.h"
+#ifdef DISPLAY
+#include "oled.h"
+#endif
 #include "wifiManager.h"
 #include "mqttManager.h"
 
 void setup()
 {
     Serial.begin(115200);
+    delay(2000);
+#ifdef DISPLAY
+    setupOLEDdisplay();
+#endif
     delay(2000);
     connectToWifi();
     delay(2000);
