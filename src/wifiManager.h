@@ -9,14 +9,14 @@
 void connectToWifi()
 {
     delay(2000);
-    Serial.print("Connecting to ");
-    Serial.println(WIFI_SSID);
+    log("Connecting to: ");
+    logln(WIFI_SSID);
 
 // Giving the esp32 a ststic IP, after it connects to the WIFI.
-#ifdef SET_STATIC_IP
-    IPAddress staticIP(STATIC_IP_ADDR); // Set your Static IP address.
-    IPAddress gateway(GATEWAY_IP_ADDR); // Set your Gateway IP address.
-    IPAddress subnet(SUBNET_ADDR);
+#ifdef SET_STATIC_IP_FOR_STA
+    IPAddress staticIP(STA_STATIC_IP_ADDR); // Set your Static IP address.
+    IPAddress gateway(STA_GATEWAY_IP_ADDR); // Set your Gateway IP address.
+    IPAddress subnet(STA_SUBNET_ADDR);
     if (!WiFi.config(staticIP, gateway, subnet))
     {
         Serial.println("STA Failed to configure");

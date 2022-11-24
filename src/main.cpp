@@ -8,7 +8,7 @@
  */
 
 #include <Arduino.h>
-#include "config.h"
+#include "debug.h"
 #include "wifiManager.h"
 #include "mqttManager.h"
 

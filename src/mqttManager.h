@@ -20,7 +20,7 @@ void mqttCallback(char *topic, byte *payload, unsigned int length)
 
 boolean connectToBroker()
 {
-#ifdef MQTT_HAS_PWD
+#ifdef MQTT_IS_SECURE
     esp32MQTTclient.connect("esp32MQTTClient", MQTT_USERNAME, MQTT_PASSWORD);
 #else
     esp32MQTTclient.connect("esp32MQTTClient");
