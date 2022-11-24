@@ -38,7 +38,7 @@ boolean connectToBroker()
 
 void setupMQTT()
 {
-    esp32MQTTclient.setServer(mqtt_broker, mqtt_port);
+    esp32MQTTclient.setServer(MQTT_BROKER, MQTT_PORT);
     esp32MQTTclient.setCallback(mqttCallback);
 
     lastReconnectAttempt = 0;
