@@ -11,6 +11,13 @@ void connectToWifi()
     delay(2000);
     log("Connecting to: ");
     logln(WIFI_SSID);
+#ifdef OLED_DISPLAY
+    oled.clearDisplay();
+    oled.setCursor(0, 0);
+    oled.println("Connecting to AP:\n\n");
+    oled.println(WIFI_SSID)
+        oled.display();
+#endif
 
 // Giving the esp32 a ststic IP, after it connects to the WIFI.
 #ifdef SET_STATIC_IP_FOR_STA
@@ -19,7 +26,13 @@ void connectToWifi()
     IPAddress subnet(STA_SUBNET_ADDR);
     if (!WiFi.config(staticIP, gateway, subnet))
     {
-        Serial.println("STA Failed to configure");
+        logln("STA Failed to configure");
+#ifdef OLED_DISPLAY
+        oled.clearDisplay();
+        oled.setCursor(0, 0);
+        oled.println("STA Failed to\n\nconfigure");
+        oled.display();
+#endif
     }
 #endif
     // Start to connect to WIFI
@@ -28,13 +41,35 @@ void connectToWifi()
     while (WiFi.status() != WL_CONNECTED || WiFi.status() != 3)
     {
         delay(100);
-        Serial.print(".");
+        log(".");
     }
     // Dump info
-    Serial.println("");
-    Serial.println("WiFi connected!");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
-    Serial.print("MAC address: ");
-    Serial.println(WiFi.macAddress());
+
+#ifdef SET_STATIC_IP_FOR_STA
+    logln("");
+    logln("WiFi connected!");
+    log("STATIC IP address: ");
+    logln(WiFi.localIP());
+    log("MAC address: ");
+    logln(WiFi.macAddress());
+#ifdef OLED_DISPLAY
+    oled.clearDisplay();
+    oled.setCursor(0, 0);
+    oled.println("STATIC IP address: ");
+    oled.display();
+#endif
+#else
+    logln("");
+    logln("WiFi connected!");
+    log("DNS IP address: ");
+    logln(WiFi.localIP());
+    log("MAC address: ");
+    logln(WiFi.macAddress());
+#ifdef OLED_DISPLAY
+    oled.clearDisplay();
+    oled.setCursor(0, 0);
+    oled.println("DNS IP address: ");
+    oled.display();
+#endif
+#endif
 }

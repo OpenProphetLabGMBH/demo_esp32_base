@@ -15,6 +15,12 @@
 #define logHex(x) x;
 #endif
 
+#ifdef OLED_DISPLAY
+#define scr_prnt(x) oled.print(x);
+#else
+#define scr_prnt(x) x;
+#endif
+
 // ------------------------------------------------------------------------------------------------------------ //
 // For SSD1306 OLED 128x32 screen related
 // ------------------------------------------------------------------------------------------------------------ //
@@ -25,3 +31,11 @@ uint8_t OLED_SCREEN_ADDRESS = 0x3C;          //< See datasheet for Address; 0x3D
 // Note: If you are using another SSD1306 screen resolution, say 128x64, then change the screen height ...
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
+
+// ------------------------------------------------------------------------------------------------------------ //
+// For Rorary Encoder with Button related
+// ------------------------------------------------------------------------------------------------------------ //
+#define ROTARY_ENCODER_DATA_PIN 23
+#define ROTARY_ENCODER_CLCK_PIN 19
+#define ROTARY_ENCODER_BTN_PIN 22
+#define ROTARY_ENCODER_VCC_PIN -1 // Put -1 if the VCC of encoder is tied to VCC pin on the borard directly.
