@@ -33,7 +33,5 @@ void loop()
 {
     // ** Non-Blocking "Reconnect to MQTT Broker" method
     watchMQTTStatus();
-
-    // in loop call your custom function which will process rotary encoder values
-    rotaryLoop();
+    watchLoopEncoder();
 }

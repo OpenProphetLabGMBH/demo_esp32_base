@@ -27,23 +27,32 @@ void rotaryOnButtonClick()
 {
     static unsigned long lastTimePressed = 0;
     // Ignore multiple press in that time milliseconds.
-    if (millis() - lastTimePressed < 20)
-    {
+    if (millis() - lastTimePressed < debouncePeriod)
         return;
-    }
     lastTimePressed = millis();
-    log("button pressed ");
-    log(millis());
-    logln(" milliseconds after restart");
+
+    logln("Btn Pressed!");
+    log("Sending MQTT data: ");
+    logln("client/esp32_1/encoder/button/state: pressed\n");
+
+    esp32MQTTclient.publish("client/esp32_1/encoder/button/state", "pressed");
 }
 
-void rotaryLoop()
+void watchLoopEncoder()
 {
     // Don't print anything unless value changed.
     if (rotaryEncoder.encoderChanged())
     {
-        log("Value: ");
-        logln(rotaryEncoder.readEncoder());
+        long encoderValInt = rotaryEncoder.readEncoder();
+        //  For printing and for publishing to MQTT broker we need to conver that to a char* array.
+        char encoderValStr[(((sizeof encoderValInt) * CHAR_BIT) + 2) / 3 + 2];
+        itoa(encoderValInt, encoderValStr, 10);
+
+        logln("Encoder Value: " + String(encoderValStr));
+        log("Sending MQTT data: ");
+        logln("client/esp32_1/encoder/encoder/value: " + String(encoderValStr) + "\n");
+
+        esp32MQTTclient.publish("client/esp32_1/encoder/encoder/value", encoderValStr);
     }
     if (rotaryEncoder.isEncoderButtonClicked())
     {

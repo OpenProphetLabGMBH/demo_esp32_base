@@ -39,3 +39,4 @@ uint8_t OLED_SCREEN_ADDRESS = 0x3C;          //< See datasheet for Address; 0x3D
 #define ROTARY_ENCODER_CLCK_PIN 19
 #define ROTARY_ENCODER_BTN_PIN 22
 #define ROTARY_ENCODER_VCC_PIN -1 // Put -1 if the VCC of encoder is tied to VCC pin on the borard directly.
+static unsigned long debouncePeriod = 10;
