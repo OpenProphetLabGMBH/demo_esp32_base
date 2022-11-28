@@ -22,7 +22,7 @@
 #endif
 
 // ------------------------------------------------------------------------------------------------------------ //
-// For SSD1306 OLED 128x32 screen related
+// For SSD1306 OLED 128x32 screen, related macros
 // ------------------------------------------------------------------------------------------------------------ //
 #define OLED_RESET_PIN 17                    // Reset pin # (or -1 if sharing Arduino reset pin)
 uint8_t SSD1306_ADDRESSES[2] = {0x3c, 0x3D}; // LUT for ssd1306 oled displays, used to validate discovered addr.
@@ -33,10 +33,25 @@ uint8_t OLED_SCREEN_ADDRESS = 0x3C;          //< See datasheet for Address; 0x3D
 #define SCREEN_HEIGHT 32
 
 // ------------------------------------------------------------------------------------------------------------ //
-// For Rorary Encoder with Button related
+// For Rotary Encoder with Button, related macros
 // ------------------------------------------------------------------------------------------------------------ //
 #define ROTARY_ENCODER_DATA_PIN 23
 #define ROTARY_ENCODER_CLCK_PIN 19
 #define ROTARY_ENCODER_BTN_PIN 22
 #define ROTARY_ENCODER_VCC_PIN -1 // Put -1 if the VCC of encoder is tied to VCC pin on the borard directly.
 static unsigned long debouncePeriod = 10;
+
+// ------------------------------------------------------------ //
+// MQTT subscription LUT
+// ------------------------------------------------------------ //
+String MQTT_SUBS_TOPICS[2] = {
+    "system/for_clients",
+    "protopie/slider/value"};
+
+// ------------------------------------------------------------ //
+// MQTT publish LUT
+// ------------------------------------------------------------ //
+String MQTT_PUBS_TOPICS[3] = {
+    "client/esp32_1_knob/state",
+    "client/esp32_1_knob/button/state",
+    "client/esp32_1_knob/encoder/value"};

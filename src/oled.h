@@ -125,10 +125,10 @@ void setupOLEDdisplay()
         oled.setCursor(0, 0); // Start at top-left corner
 
         // HELLO WORLD MESSAGE
-        oled.clearDisplay();
-        oled.setCursor(0, 0);
-        oled.println("Hello World!");
-        oled.display();
+        // oled.clearDisplay();
+        // oled.setCursor(0, 0);
+        // oled.println("Hello World!");
+        // oled.display();
     }
 
     // .. for test:

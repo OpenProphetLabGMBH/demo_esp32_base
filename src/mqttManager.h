@@ -5,13 +5,10 @@
 
 #include <PubSubClient.h>
 
-long lastReconnectAttempt = 0; // A var that is used to check connection status of with the MQTT broker.
-
-String MQTT_PUBLISH_TOPICS[2] = {"test1", "test2"};
-// #define MQTT_SUBSCRIPTION_TOPIC "/icircuit/ESP32/serialdata/rx"
-
 WiFiClient esp32WifiClient;
 PubSubClient esp32MQTTclient(esp32WifiClient);
+
+long lastReconnectAttempt = 0; // A var that is used to check connection status of with the MQTT broker.
 
 void mqttCallback(char *topic, byte *payload, unsigned int length)
 {
@@ -29,18 +26,23 @@ boolean connectToBroker()
 
     if (esp32MQTTclient.connected())
     {
-        Serial.println("Connected to broker!");
-        // Once connected, publish an announcement...
-        log("Sending MQTT data: ");
-        logln("client/esp32_1/status: online");
-        esp32MQTTclient.publish("client/esp32_1/status", "online");
-        // And re-subscribe...
-        logln("Subscribing to MQTT topics: ");
-        logln("1. system/for_clients");
-        logln("2. system/for_clients");
-        esp32MQTTclient.subscribe("system/for_clients");
-    }
+        logln("Connected to broker!");
+        // Once connected, publish an announcement ...
+        logln("\nPublishing MQTT data: ");
+        log("client/esp32_1_knob/state");
+        log(": ");
+        logln("online\n");
+        esp32MQTTclient.publish("client/esp32_1_knob/state", "online");
 
+        // And re-subscribe to assigned topics
+        logln("Subscribing to following MQTT Topics: ");
+        log("1. ");
+        logln("system/for_clients");
+        esp32MQTTclient.subscribe("system/for_clients");
+        log("2. ");
+        logln("protopie/slider/value\n");
+        esp32MQTTclient.subscribe("protopie/slider/value");
+    }
     return esp32MQTTclient.connected();
 }
 
@@ -55,7 +57,6 @@ void setupMQTT()
 // ** Non-Blocking "Reconnect to MQTT Broker" method.
 void watchMQTTStatus()
 {
-
     if (!esp32MQTTclient.connected())
     {
         long now = millis();

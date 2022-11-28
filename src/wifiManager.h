@@ -5,6 +5,18 @@
 
 #include <WiFi.h>
 
+void showIPOnScrn(boolean _isStaticIP)
+{
+    oled.clearDisplay();
+    oled.setCursor(0, 0);
+    if (_isStaticIP)
+        oled.println("STATIC IP address: ");
+    else
+        oled.println("DNS IP address: ");
+    oled.println(WiFi.localIP());
+    oled.display();
+}
+
 // A method that connects to a given wifi AP and tries to assign a static IP address (defined in config.h).
 void connectToWifi()
 {
@@ -15,8 +27,8 @@ void connectToWifi()
     oled.clearDisplay();
     oled.setCursor(0, 0);
     oled.println("Connecting to AP:\n\n");
-    oled.println(WIFI_SSID)
-        oled.display();
+    oled.println(WIFI_SSID);
+    oled.display();
 #endif
 
 // Giving the esp32 a ststic IP, after it connects to the WIFI.
@@ -53,10 +65,8 @@ void connectToWifi()
     log("MAC address: ");
     logln(WiFi.macAddress());
 #ifdef OLED_DISPLAY
-    oled.clearDisplay();
-    oled.setCursor(0, 0);
-    oled.println("STATIC IP address: ");
-    oled.display();
+    boolean isStaticIp = true;
+    showIPOnScrn(isStaticIP);
 #endif
 #else
     logln("");
@@ -66,10 +76,8 @@ void connectToWifi()
     log("MAC address: ");
     logln(WiFi.macAddress());
 #ifdef OLED_DISPLAY
-    oled.clearDisplay();
-    oled.setCursor(0, 0);
-    oled.println("DNS IP address: ");
-    oled.display();
+    boolean isStaticIp = false;
+    showIPOnScrn(isStaticIP);
 #endif
 #endif
 }

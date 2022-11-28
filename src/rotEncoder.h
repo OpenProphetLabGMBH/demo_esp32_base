@@ -33,9 +33,10 @@ void rotaryOnButtonClick()
 
     logln("Btn Pressed!");
     log("Sending MQTT data: ");
-    logln("client/esp32_1/encoder/button/state: pressed\n");
+    logln("client/esp32_1_knob/button/state: pressed\n");
 
-    esp32MQTTclient.publish("client/esp32_1/encoder/button/state", "pressed");
+    esp32MQTTclient.publish("client/esp32_1_knob/button/state", "pressed");
+    // esp32MQTTclient.publish(String(MQTT_PUBS_TOPICS[1]).c_str(), "pressed");
 }
 
 void watchLoopEncoder()
@@ -50,9 +51,10 @@ void watchLoopEncoder()
 
         logln("Encoder Value: " + String(encoderValStr));
         log("Sending MQTT data: ");
-        logln("client/esp32_1/encoder/encoder/value: " + String(encoderValStr) + "\n");
+        logln("client/esp32_1_knob/encoder/value: " + String(encoderValStr) + "\n");
 
-        esp32MQTTclient.publish("client/esp32_1/encoder/encoder/value", encoderValStr);
+        esp32MQTTclient.publish("client/esp32_1_knob/encoder/value", encoderValStr);
+        // esp32MQTTclient.publish(String(MQTT_PUBS_TOPICS[2]).c_str(), encoderValStr);
     }
     if (rotaryEncoder.isEncoderButtonClicked())
     {
