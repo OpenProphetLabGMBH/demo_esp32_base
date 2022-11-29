@@ -28,14 +28,14 @@ boolean connectToBroker()
     {
         logln("Connected to broker!");
         // Once connected, publish an announcement ...
-        logln("Publishing ... ");
+        logln("\nPublishing ... ");
         log(MQTT_PUBS_TOPICS[0]);
         logln(": online");
         esp32MQTTclient.publish(MQTT_PUBS_TOPICS[0], "online");
         // esp32MQTTclient.publish("client/esp32_1_knob/state", "online");
 
         // And re-subscribe to assigned topics
-        logln("Subscribing to following MQTT Topics: ");
+        logln("\nSubscribing to following MQTT Topics: ");
         // log("1. ");
         // logln("system/for_clients");
         // esp32MQTTclient.subscribe("system/for_clients");
