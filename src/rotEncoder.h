@@ -5,10 +5,6 @@
 
 #include "AiEsp32RotaryEncoder.h"
 
-// Depending on your encoder - try 1,2 or 4 to get expected behaviour.
-// #define ROTARY_ENCODER_STEPS 1
-// #define ROTARY_ENCODER_STEPS 2
-#define ROTARY_ENCODER_STEPS 4
 
 // Instead of changing here, rather change numbers above.
 AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(
@@ -69,8 +65,8 @@ void setupEncoder()
     rotaryEncoder.setup(readEncoderISR);
     // set boundaries and if values should cycle or not
     // in this example we will set possible values between 0 and 1000;
-    bool circleValues = true;
-    rotaryEncoder.setBoundaries(0, 500, circleValues); // minValue, maxValue, circleValues true|false (when max go to min and vice versa)
+
+    rotaryEncoder.setBoundaries(MIN_ENCODER_VAL, MAX_ENCODER_VAL, CIRCLE_VALUES); // minValue, maxValue, circleValues true|false (when max go to min and vice versa)
 
     /*Rotary acceleration introduced 25.2.2021.
      * in case range to select is huge, for example - select a value between 0 and 1000 and we want 785

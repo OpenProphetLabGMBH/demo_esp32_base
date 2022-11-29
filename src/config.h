@@ -39,19 +39,29 @@ uint8_t OLED_SCREEN_ADDRESS = 0x3C;          //< See datasheet for Address; 0x3D
 #define ROTARY_ENCODER_CLCK_PIN 19
 #define ROTARY_ENCODER_BTN_PIN 22
 #define ROTARY_ENCODER_VCC_PIN -1 // Put -1 if the VCC of encoder is tied to VCC pin on the borard directly.
+
 static unsigned long debouncePeriod = 10;
+
+// Depending on your encoder - try 1,2 or 4 to get expected behaviour.
+// #define ROTARY_ENCODER_STEPS 1
+// #define ROTARY_ENCODER_STEPS 2
+#define ROTARY_ENCODER_STEPS 4
+
+#define MIN_ENCODER_VAL 0
+#define MAX_ENCODER_VAL 100
+#define CIRCLE_VALUES true
 
 // ------------------------------------------------------------ //
 // MQTT subscription LUT
 // ------------------------------------------------------------ //
-String MQTT_SUBS_TOPICS[2] = {
+const char *MQTT_SUBS_TOPICS[] = {
     "system/for_clients",
     "protopie/slider/value"};
 
 // ------------------------------------------------------------ //
 // MQTT publish LUT
 // ------------------------------------------------------------ //
-String MQTT_PUBS_TOPICS[3] = {
+const char *MQTT_PUBS_TOPICS[] = {
     "client/esp32_1_knob/state",
     "client/esp32_1_knob/button/state",
     "client/esp32_1_knob/encoder/value"};

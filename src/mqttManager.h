@@ -28,20 +28,27 @@ boolean connectToBroker()
     {
         logln("Connected to broker!");
         // Once connected, publish an announcement ...
-        logln("\nPublishing MQTT data: ");
-        log("client/esp32_1_knob/state");
-        log(": ");
-        logln("online\n");
-        esp32MQTTclient.publish("client/esp32_1_knob/state", "online");
+        logln("Publishing ... ");
+        log(MQTT_PUBS_TOPICS[0]);
+        logln(": online");
+        esp32MQTTclient.publish(MQTT_PUBS_TOPICS[0], "online");
+        // esp32MQTTclient.publish("client/esp32_1_knob/state", "online");
 
         // And re-subscribe to assigned topics
         logln("Subscribing to following MQTT Topics: ");
-        log("1. ");
-        logln("system/for_clients");
-        esp32MQTTclient.subscribe("system/for_clients");
-        log("2. ");
-        logln("protopie/slider/value\n");
-        esp32MQTTclient.subscribe("protopie/slider/value");
+        // log("1. ");
+        // logln("system/for_clients");
+        // esp32MQTTclient.subscribe("system/for_clients");
+        // log("2. ");
+        // logln("protopie/slider/value\n");
+        // esp32MQTTclient.subscribe("protopie/slider/value");
+        for (int i = 0; i <= ((sizeof(MQTT_SUBS_TOPICS) / sizeof(MQTT_SUBS_TOPICS[0])) - 1); i++)
+        {
+            log(i);
+            log(". ");
+            logln(MQTT_SUBS_TOPICS[i]);
+            esp32MQTTclient.subscribe(MQTT_SUBS_TOPICS[i]);
+        }
     }
     return esp32MQTTclient.connected();
 }
