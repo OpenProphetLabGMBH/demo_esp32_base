@@ -48,7 +48,7 @@ static unsigned long debouncePeriod = 10;
 #define ROTARY_ENCODER_STEPS 4
 
 #define MIN_ENCODER_VAL 0
-#define MAX_ENCODER_VAL 100
+#define MAX_ENCODER_VAL 360
 #define CIRCLE_VALUES true
 
 // ------------------------------------------------------------ //
@@ -56,6 +56,7 @@ static unsigned long debouncePeriod = 10;
 // ------------------------------------------------------------ //
 const char *MQTT_SUBS_TOPICS[] = {
     "system/for_clients",
+    "protopie/switch/state",
     "protopie/slider/value"};
 
 // ------------------------------------------------------------ //
@@ -64,4 +65,13 @@ const char *MQTT_SUBS_TOPICS[] = {
 const char *MQTT_PUBS_TOPICS[] = {
     "client/esp32_1_knob/state",
     "client/esp32_1_knob/button/state",
-    "client/esp32_1_knob/encoder/value"};
+    "client/esp32_1_knob/encoder/value",
+    "client/esp32_1_knob/encoder/direction"};
+
+const char *MQTT_PUBS_MSGS[] = {
+    "online",
+    "clicked",
+    "pressed",
+    "released",
+    "forward",
+    "backward"};

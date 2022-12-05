@@ -5,7 +5,6 @@
 
 #include "AiEsp32RotaryEncoder.h"
 
-
 // Instead of changing here, rather change numbers above.
 AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(
     ROTARY_ENCODER_DATA_PIN,
@@ -19,7 +18,7 @@ void IRAM_ATTR readEncoderISR()
     rotaryEncoder.readEncoder_ISR();
 }
 
-void rotaryOnButtonClick()
+void onEncoderBtnClick()
 {
     static unsigned long lastTimePressed = 0;
     // Ignore multiple press in that time milliseconds.
@@ -27,34 +26,81 @@ void rotaryOnButtonClick()
         return;
     lastTimePressed = millis();
 
-    logln("Btn Pressed!");
-    log("Sending MQTT data: ");
-    logln("client/esp32_1_knob/button/state: pressed\n");
-
-    esp32MQTTclient.publish("client/esp32_1_knob/button/state", "pressed");
-    // esp32MQTTclient.publish(String(MQTT_PUBS_TOPICS[1]).c_str(), "pressed");
+    logln("Btn clicked!");
+    logln("Publishing:");
+    logln(String(MQTT_PUBS_TOPICS[1]) + ": " + String(MQTT_PUBS_MSGS[1]) + "\n");
+    esp32MQTTclient.publish(MQTT_PUBS_TOPICS[1], MQTT_PUBS_MSGS[1]);
 }
 
+bool encoderBtnState = false;
+bool encoderBtnPrevState = false;
+void onEncoderBtnEvent()
+{
+    if (encoderBtnState != encoderBtnPrevState)
+    {
+        if (encoderBtnState)
+        {
+            logln("Btn pressed");
+            logln("Publishing:");
+            logln(String(MQTT_PUBS_TOPICS[1]) + ": " + String(MQTT_PUBS_MSGS[2]) + "\n");
+            esp32MQTTclient.publish(MQTT_PUBS_TOPICS[1], MQTT_PUBS_MSGS[2]);
+        }
+        else
+        {
+            logln("Btn released");
+            logln("Publishing:");
+            logln(String(MQTT_PUBS_TOPICS[1]) + ": " + String(MQTT_PUBS_MSGS[3]) + "\n");
+            esp32MQTTclient.publish(MQTT_PUBS_TOPICS[1], MQTT_PUBS_MSGS[3]);
+        }
+        encoderBtnPrevState = encoderBtnState;
+    }
+}
+
+long prevEncoderVal = 0;
 void watchLoopEncoder()
 {
     // Don't print anything unless value changed.
     if (rotaryEncoder.encoderChanged())
     {
         long encoderValInt = rotaryEncoder.readEncoder();
-        //  For printing and for publishing to MQTT broker we need to conver that to a char* array.
+        // Convert to str, for printing and for publishing to MQTT broker we need to conver that to a char* array.
         char encoderValStr[(((sizeof encoderValInt) * CHAR_BIT) + 2) / 3 + 2];
         itoa(encoderValInt, encoderValStr, 10);
-
         logln("Encoder Value: " + String(encoderValStr));
-        log("Sending MQTT data: ");
-        logln("client/esp32_1_knob/encoder/value: " + String(encoderValStr) + "\n");
 
-        esp32MQTTclient.publish("client/esp32_1_knob/encoder/value", encoderValStr);
-        // esp32MQTTclient.publish(String(MQTT_PUBS_TOPICS[2]).c_str(), encoderValStr);
+        if (encoderValInt > prevEncoderVal)
+        {
+            logln("DIRECTION: forward [>]");
+            logln("Publishing:");
+            logln(String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[4]) + "\n");
+            esp32MQTTclient.publish(MQTT_PUBS_TOPICS[3], MQTT_PUBS_MSGS[4]);
+        }
+        if (encoderValInt < prevEncoderVal)
+        {
+            logln("DIRECTION: backward [<]");
+            logln("Publishing:");
+            logln(String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[5]) + "\n");
+            esp32MQTTclient.publish(MQTT_PUBS_TOPICS[3], MQTT_PUBS_MSGS[5]);
+        }
+        prevEncoderVal = encoderValInt;
+
+        // Additinally, after sending direction, also send teh raw angle.
+        logln(String(MQTT_PUBS_TOPICS[2]) + ": " + String(encoderValStr) + "\n");
+        esp32MQTTclient.publish(MQTT_PUBS_TOPICS[2], encoderValStr);
     }
     if (rotaryEncoder.isEncoderButtonClicked())
     {
-        rotaryOnButtonClick();
+        onEncoderBtnClick();
+    }
+    if (rotaryEncoder.isEncoderButtonDown())
+    {
+        encoderBtnState = true;
+        onEncoderBtnEvent();
+    }
+    else
+    {
+        encoderBtnState = false;
+        onEncoderBtnEvent();
     }
 }
 

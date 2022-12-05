@@ -12,7 +12,10 @@ long lastReconnectAttempt = 0; // A var that is used to check connection status 
 
 void mqttCallback(char *topic, byte *payload, unsigned int length)
 {
-    // Decide what to do with received data
+    logln("Received MQTT message");
+    log("Topic: ");
+    logln(String(topic));
+    // [TBD] Payload parsing and business logic
 }
 
 boolean connectToBroker()
@@ -28,20 +31,12 @@ boolean connectToBroker()
     {
         logln("Connected to broker!");
         // Once connected, publish an announcement ...
-        logln("\nPublishing ... ");
-        log(MQTT_PUBS_TOPICS[0]);
-        logln(": online");
-        esp32MQTTclient.publish(MQTT_PUBS_TOPICS[0], "online");
-        // esp32MQTTclient.publish("client/esp32_1_knob/state", "online");
+        logln("\nPublishing:");
+        logln(String(MQTT_PUBS_TOPICS[0]) + ": " + String(MQTT_PUBS_MSGS[0]) + "\n");
+        esp32MQTTclient.publish(MQTT_PUBS_TOPICS[0], MQTT_PUBS_MSGS[0]);
 
         // And re-subscribe to assigned topics
         logln("\nSubscribing to following MQTT Topics: ");
-        // log("1. ");
-        // logln("system/for_clients");
-        // esp32MQTTclient.subscribe("system/for_clients");
-        // log("2. ");
-        // logln("protopie/slider/value\n");
-        // esp32MQTTclient.subscribe("protopie/slider/value");
         for (int i = 0; i <= ((sizeof(MQTT_SUBS_TOPICS) / sizeof(MQTT_SUBS_TOPICS[0])) - 1); i++)
         {
             log(i);
