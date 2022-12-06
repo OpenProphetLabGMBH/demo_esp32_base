@@ -72,20 +72,20 @@ void watchLoopEncoder()
         {
             logln("DIRECTION: forward [>]");
             logln("Publishing:");
-            logln(String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[4]) + "\n");
+            logln("\t" + String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[4]));
             esp32MQTTclient.publish(MQTT_PUBS_TOPICS[3], MQTT_PUBS_MSGS[4]);
         }
         if (encoderValInt < prevEncoderVal)
         {
             logln("DIRECTION: backward [<]");
             logln("Publishing:");
-            logln(String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[5]) + "\n");
+            logln("\t" + String(MQTT_PUBS_TOPICS[3]) + ": " + String(MQTT_PUBS_MSGS[5]));
             esp32MQTTclient.publish(MQTT_PUBS_TOPICS[3], MQTT_PUBS_MSGS[5]);
         }
         prevEncoderVal = encoderValInt;
 
         // Additinally, after sending direction, also send teh raw angle.
-        logln(String(MQTT_PUBS_TOPICS[2]) + ": " + String(encoderValStr) + "\n");
+        logln("\t" + String(MQTT_PUBS_TOPICS[2]) + ": " + String(encoderValStr) + "\n");
         esp32MQTTclient.publish(MQTT_PUBS_TOPICS[2], encoderValStr);
     }
     if (rotaryEncoder.isEncoderButtonClicked())

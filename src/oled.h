@@ -4,8 +4,12 @@
  */
 
 #include <Wire.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_GFX.h>
+#include <U8g2lib.h>
+
+U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, OLED_CLK_PIN, OLED_DATA_PIN, /* reset=*/U8X8_PIN_NONE);
+U8G2LOG u8g2log;
+uint8_t u8log_buffer[U8LOG_WIDTH * U8LOG_HEIGHT];
+boolean ENABLE_OLED = false;
 
 // --- OLED display's i2c addr auto-discovery feature --- //
 uint8_t getDisplayAddr()
@@ -80,55 +84,32 @@ boolean validAddr(uint8_t _addr)
     return isValidAddr;
 }
 
-Adafruit_SSD1306 oled(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET_PIN);
-boolean ENABLE_OLED = false;
-
 void setupOLEDdisplay()
 {
     logln("---------------------------------------------------------");
     logln("OLED SCREEN INIT SECTION");
     logln("---------------------------------------------------------");
-    Wire.begin();
+    Wire.begin(22, 19);
     OLED_SCREEN_ADDRESS = getDisplayAddr();
     Wire.end();
     if (validAddr(OLED_SCREEN_ADDRESS))
     {
-        // #define SSD1306_SWITCHCAPVCC 0x02 ///< Gen. display voltage from 3.3V
-        if (oled.begin(0x02C, OLED_SCREEN_ADDRESS))
-        {
-            ENABLE_OLED = true;
-            logln("\nOLED SSD1306 INITIATED: OK!\n");
-        }
-        else
-        {
-            ENABLE_OLED = false;
-            logln(F("\nOLED SSD1306 INITIATED: FAILED [x]\n"));
-        }
+        ENABLE_OLED = true;
+        logln("\nOLED SSD1306 CAN BE INITIATED!\n");
     }
     else
     {
         ENABLE_OLED = false;
-        logln(F("\nOLED SSD1306 INITIATED: FAILED [x]\n"));
+        logln(F("\n[x] OLED SSD1306 CAN NOT BE INITIATED\n"));
     }
     if (ENABLE_OLED)
     {
         // SETUP OLED
-        // More details:   https://randomnerdtutorials.com/guide-for-oled-display-with-arduino/
-        oled.setFont(); // default font
-        // oled was successfully initiated, so Clear the OLED buffer
-        oled.clearDisplay();
-        oled.display();
-        oled.setTextSize(1); // Normal 1:1 pixel scale
-        // oled.setTextColor(SSD1306_WHITE); // Draw white text
-        // #define SSD1306_WHITE 1               ///< Draw 'on' pixels
-        oled.setTextColor(1); // Draw white text
-        oled.setCursor(0, 0); // Start at top-left corner
-
-        // HELLO WORLD MESSAGE
-        // oled.clearDisplay();
-        // oled.setCursor(0, 0);
-        // oled.println("Hello World!");
-        // oled.display();
+        u8g2.begin();
+        u8g2.setFont(u8g2_font_5x7_mf); // set the font for the terminal window
+        u8g2log.begin(u8g2, U8LOG_WIDTH, U8LOG_HEIGHT, u8log_buffer);
+        u8g2log.setLineHeightOffset(0); // set extra space between lines in pixel, this can be negative
+        u8g2log.setRedrawMode(0);       // 0: Update screen with newline, 1: Update screen for every char
     }
 
     // .. for test:
