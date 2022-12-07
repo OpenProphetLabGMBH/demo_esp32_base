@@ -22,7 +22,7 @@ void mqttCallback(char *topic, byte *payload, unsigned int length)
     log("received payload:");
     logln(payloadStr);
 
-    // switch states
+    // assign switch states to a led 
     if (String(topic).equals(MQTT_SUBS_TOPICS[1]))
     {
         // if recievd "on"
@@ -36,9 +36,9 @@ void mqttCallback(char *topic, byte *payload, unsigned int length)
             ledState = false;
         }
     }
+    // asign slider values to a led's brightness
     if (String(topic).equals(MQTT_SUBS_TOPICS[2]))
     {
-        // slider value
         ledBrightness = payloadStr.toFloat();
     }
 }
