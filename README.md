@@ -13,7 +13,9 @@ monitor_port = /dev/ttyUSBX
 ```
 
 Then click the pio icon:
-![nav 0](/assets/system_diagram/system_diagram.001.png) https://github.com/OpenProphetLabGMBH/demo_esp32_base/blob/main/Assets/Screenshot%202023-02-28%20at%2010.48.31.png
 
-And `build/upload/monitor` for your specific 
-![nav 1](/assets/system_diagram/system_diagram.001.png)
+![nav 0](/Assets/nav0.png)
+
+And `build/upload/monitor` for your specific dev system
+
+![nav 1](/Assets/nav1.png)
